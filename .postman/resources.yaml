@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: 62dd3533-5140-447e-81c1-b487820be95f
+
+localResources:
+  collections:
+    - ../CineVault.postman_collection.json
