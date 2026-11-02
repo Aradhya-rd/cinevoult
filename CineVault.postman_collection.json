@@ -1,0 +1,131 @@
+{
+  "info": {
+    "_postman_id": "c1901a0e-26f5-4e78-9e12-cinevault001",
+    "name": "CineVault - Movie Collection API",
+    "description": "Postman Collection for CineVault College Assignment REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Create Movie (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Inception\",\n  \"genre\": \"Sci-Fi\",\n  \"releaseYear\": 2010,\n  \"director\": \"Christopher Nolan\",\n  \"rating\": 8.8\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/movies",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "movies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get All Movies (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/movies",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "movies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Movie by ID (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/movies/REPLACE_WITH_MOVIE_ID",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "movies",
+            "REPLACE_WITH_MOVIE_ID"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Update Movie by ID (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Inception (Special Edition)\",\n  \"genre\": \"Sci-Fi\",\n  \"releaseYear\": 2010,\n  \"director\": \"Christopher Nolan\",\n  \"rating\": 9.2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/movies/REPLACE_WITH_MOVIE_ID",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "movies",
+            "REPLACE_WITH_MOVIE_ID"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Delete Movie by ID (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/movies/REPLACE_WITH_MOVIE_ID",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "movies",
+            "REPLACE_WITH_MOVIE_ID"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
