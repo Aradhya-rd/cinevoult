@@ -5,6 +5,18 @@
     "description": "Postman Collection for CineVault College Assignment REST API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "movie_id",
+      "value": "65e000000000000000000001",
+      "type": "string"
+    }
+  ],
   "item": [
     {
       "name": "1. Create Movie (POST)",
@@ -21,17 +33,16 @@
           "raw": "{\n  \"title\": \"Inception\",\n  \"genre\": \"Sci-Fi\",\n  \"releaseYear\": 2010,\n  \"director\": \"Christopher Nolan\",\n  \"rating\": 8.8\n}"
         },
         "url": {
-          "raw": "http://localhost:5000/api/movies",
-          "protocol": "http",
+          "raw": "{{base_url}}/api/movies",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "movies"
           ]
-        }
+        },
+        "description": "Create a new movie record in MongoDB."
       },
       "response": []
     },
@@ -41,17 +52,16 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:5000/api/movies",
-          "protocol": "http",
+          "raw": "{{base_url}}/api/movies",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "movies"
           ]
-        }
+        },
+        "description": "Retrieve all movies stored in the database."
       },
       "response": []
     },
@@ -61,18 +71,17 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:5000/api/movies/REPLACE_WITH_MOVIE_ID",
-          "protocol": "http",
+          "raw": "{{base_url}}/api/movies/{{movie_id}}",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "movies",
-            "REPLACE_WITH_MOVIE_ID"
+            "{{movie_id}}"
           ]
-        }
+        },
+        "description": "Retrieve a single movie by its MongoDB ObjectId."
       },
       "response": []
     },
@@ -91,18 +100,17 @@
           "raw": "{\n  \"title\": \"Inception (Special Edition)\",\n  \"genre\": \"Sci-Fi\",\n  \"releaseYear\": 2010,\n  \"director\": \"Christopher Nolan\",\n  \"rating\": 9.2\n}"
         },
         "url": {
-          "raw": "http://localhost:5000/api/movies/REPLACE_WITH_MOVIE_ID",
-          "protocol": "http",
+          "raw": "{{base_url}}/api/movies/{{movie_id}}",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "movies",
-            "REPLACE_WITH_MOVIE_ID"
+            "{{movie_id}}"
           ]
-        }
+        },
+        "description": "Update an existing movie record by ID."
       },
       "response": []
     },
@@ -112,18 +120,17 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:5000/api/movies/REPLACE_WITH_MOVIE_ID",
-          "protocol": "http",
+          "raw": "{{base_url}}/api/movies/{{movie_id}}",
           "host": [
-            "localhost"
+            "{{base_url}}"
           ],
-          "port": "5000",
           "path": [
             "api",
             "movies",
-            "REPLACE_WITH_MOVIE_ID"
+            "{{movie_id}}"
           ]
-        }
+        },
+        "description": "Delete a movie record by ID from MongoDB."
       },
       "response": []
     }

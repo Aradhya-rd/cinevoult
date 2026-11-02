@@ -1,6 +1,8 @@
-# CineVault - Movie Collection API
+# CineVault — Movie Collection Management System
 
-A simple, beginner-friendly RESTful backend API built with **Node.js**, **Express.js**, **MongoDB Atlas**, and **Mongoose** for managing a personal movie collection. Designed for college assignments with clean, readable code and clear error handling.
+A beginner-friendly, clean and complete full-stack Movie Collection Management System built with **Node.js**, **Express.js**, **MongoDB Atlas**, **Mongoose**, and **Vanilla JavaScript (HTML5/CSS3)**.
+
+Designed for college assignments and live teacher demonstrations with clean architecture, robust validation, full REST API CRUD support, and zero unnecessary complex frameworks.
 
 ---
 
@@ -8,352 +10,201 @@ A simple, beginner-friendly RESTful backend API built with **Node.js**, **Expres
 
 ```text
 CineVault/
+│
 ├── config/
-│   └── db.js                 # MongoDB connection setup
+│   └── db.js                        # Mongoose connection logic & Atlas validation
+│
 ├── controllers/
-│   └── movieController.js    # Business logic for CRUD operations
+│   └── movieController.js           # CRUD controllers (POST, GET, PUT, DELETE)
+│
 ├── models/
-│   └── Movie.js              # Mongoose schema and model
+│   └── Movie.js                     # Mongoose schema with field validation
+│
 ├── routes/
-│   └── movieRoutes.js        # Express route definitions
-├── .env                      # Environment variables (credentials - ignored by Git)
-├── .env.example              # Template for environment variables
-├── .gitignore                # Git ignore configuration
-├── package.json              # Project dependencies and npm scripts
-├── server.js                 # Main application entry point
-├── CineVault.postman_collection.json # 1-click Postman test collection
-└── README.md                 # Project documentation
+│   └── movieRoutes.js               # Express route definitions for /api/movies
+│
+├── public/                          # Frontend client files (served by Express)
+│   ├── index.html                   # Semantic HTML5 user interface
+│   ├── style.css                    # Clean, minimal, responsive CSS3 styling
+│   └── script.js                    # Vanilla JS DOM & fetch() API integration
+│
+├── .env                             # Environment variables (Credentials - ignored by Git)
+├── .env.example                     # Sample template for environment variables
+├── .gitignore                       # Git ignore rules (.env, node_modules, etc.)
+├── package.json                     # Project scripts and dependencies
+├── server.js                        # Main Express application entry point
+├── automated-test.js                # Repeatable end-to-end automated API test script
+├── CineVault.postman_collection.json# Postman desktop testing collection
+└── README.md                        # Complete project documentation
 ```
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Technology Stack
 
-- **Node.js** - JavaScript runtime environment
-- **Express.js** - Minimalist web framework for Node.js
-- **MongoDB Atlas** - Cloud NoSQL database
-- **Mongoose** - Object Data Modeling (ODM) library for MongoDB
-- **dotenv** - Environment variable management
-- **nodemon** - Development server auto-reload utility
-- **Postman** - API testing tool
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript (Fetch API)
+- **Backend:** Node.js, Express.js (REST API architecture)
+- **Database:** MongoDB Atlas (Cloud NoSQL), Mongoose ODM
+- **Testing:** Postman Desktop, Native Node.js Automated Test Suite (`automated-test.js`)
 
 ---
 
 ## 🎬 Movie Data Model
 
-Each movie object contains the following fields:
+Every movie stored in MongoDB has the following schema:
 
-| Field | Type | Required | Description |
+| Field | Type | Validation Rules | Description |
 |---|---|---|---|
-| `title` | String | Yes | Name of the movie |
-| `genre` | String | Yes | Genre (e.g., Action, Sci-Fi, Drama) |
-| `releaseYear` | Number | Yes | Year of release (e.g., 2010) |
-| `director` | String | Yes | Director's name |
-| `rating` | Number | Yes | Rating between 0 and 10 |
+| `title` | String | Required, trimmed | Name of the movie |
+| `genre` | String | Required, trimmed | Movie genre (e.g. Action, Sci-Fi) |
+| `releaseYear` | Number | Required | Release year (e.g. 2010) |
+| `director` | String | Required, trimmed | Director name |
+| `rating` | Number | Required, Min: 0, Max: 10 | IMDb-style rating |
+| `createdAt` | Date | Managed by Mongoose | Timestamp of creation |
+| `updatedAt` | Date | Managed by Mongoose | Timestamp of last update |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Prerequisites & Installation
 
 ### 1. Prerequisites
-
-Make sure you have installed on your computer:
-- [Node.js](https://nodejs.org/) (v16 or higher)
+- [Node.js](https://nodejs.org/) (Version 18 or higher recommended)
 - [Git](https://git-scm.com/)
-- [Postman](https://www.postman.com/downloads/)
+- A free [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) account
 
-### 2. Clone / Open Project
-
-Open your terminal or command prompt in the project root folder:
+### 2. Clone or Navigate to the Project Directory
 ```bash
 cd "CineVault"
 ```
 
 ### 3. Install Dependencies
-
-Install the required packages (`express`, `mongoose`, `dotenv`) and dev dependency (`nodemon`):
 ```bash
 npm install
 ```
-*(On Windows PowerShell, if script execution is restricted, use `npm.cmd install`)*
+*(On Windows PowerShell, if execution policy causes issues, run `npm.cmd install`)*
 
-### 4. Configure MongoDB Atlas (Important Manual Step)
+---
 
-1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and log in or create a free account.
-2. Create a free **M0 Shared Cluster**.
-3. **Database Access**: Under *Security* > *Database Access*, create a new user (e.g., username `admin`, choose a secure password). Remember these credentials!
-4. **Network Access**: Under *Security* > *Network Access*, click **Add IP Address** and select **Allow Access from Anywhere** (`0.0.0.0/0`) for testing/development.
-5. **Get Connection String**:
-   - Go to *Database* > *Deployments* > click **Connect**.
-   - Choose **Drivers** (Node.js).
-   - Copy the connection string. It looks like:
-     ```
-     mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
-     ```
-6. Open the `.env` file in the project root and replace `<username>` and `<password>` with your database user credentials. Specify `cinevault` as the database name:
+## 🌐 MongoDB Atlas Setup (Crucial Step)
+
+To connect your project to the cloud database:
+
+1. Log in to [MongoDB Atlas](https://account.mongodb.com/).
+2. Create or open your free **M0 cluster**.
+3. **Configure Database User:**
+   - Go to **Security** → **Database Access**.
+   - Click **Add New Database User**.
+   - Create a user (e.g. `admin`) and set a password. Note these credentials.
+4. **Configure Network Access (Whitelist IP):**
+   - Go to **Security** → **Network Access**.
+   - Click **Add IP Address**.
+   - Click **Allow Access from Anywhere** (`0.0.0.0/0`) or add your current public IP address.
+   - Click **Confirm**.
+5. **Obtain Connection String:**
+   - Under **Deployment** → **Database**, click **Connect**.
+   - Select **Drivers** (Node.js).
+   - Copy the connection string.
+6. **Set up `.env`:**
+   - Create or edit the `.env` file in the project root:
    ```env
    PORT=5000
-   MONGO_URI=mongodb+srv://admin:YourPassword123@cluster0.xxxxx.mongodb.net/cinevault?retryWrites=true&w=majority
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/cinevault?retryWrites=true&w=majority
    ```
+   - Replace `<username>` and `<password>` with your database user credentials.
+   - Ensure the database name is `/cinevault`.
 
-> ⚠️ **Note:** Never commit the `.env` file to GitHub. It is already added to `.gitignore`.
+---
 
-### 5. Run the Server
+## 💻 Running the Application
 
-Start the development server with auto-reload:
+### Start in Development Mode (with nodemon auto-restart):
 ```bash
 npm run dev
 ```
 
-For standard production execution:
+### Start in Production Mode:
 ```bash
 npm start
 ```
 
-Expected output in console:
-```
+When connected successfully, the terminal will log:
+```text
+MongoDB Connected: cluster0-shard-xx.mongodb.net
 Server running on port 5000
-MongoDB Connected: cluster0-shard-00-00.xxxxx.mongodb.net
+Frontend accessible at http://localhost:5000
+```
+
+### Open the Application
+Open your web browser and navigate to:
+```
+http://localhost:5000
 ```
 
 ---
 
-## 📡 API Endpoints
+## 📡 REST API Endpoints
 
-Base URL: `http://localhost:5000/api/movies`
+| Method | Endpoint | Description | Status Codes |
+|---|---|---|---|
+| `GET` | `/api/movies` | Retrieve all movies | `200`, `500` |
+| `POST` | `/api/movies` | Add a new movie | `201`, `400`, `500` |
+| `GET` | `/api/movies/:id` | Get single movie by MongoDB ID | `200`, `400`, `404`, `500` |
+| `PUT` | `/api/movies/:id` | Update existing movie by ID | `200`, `400`, `404`, `500` |
+| `DELETE` | `/api/movies/:id` | Delete a movie by ID | `200`, `400`, `404`, `500` |
 
-| Method | Endpoint | Description |
+### Example Request Payloads
+
+#### Create Movie (`POST /api/movies`):
+```json
+{
+  "title": "Interstellar",
+  "genre": "Sci-Fi",
+  "releaseYear": 2014,
+  "director": "Christopher Nolan",
+  "rating": 8.7
+}
+```
+
+#### Update Movie (`PUT /api/movies/:id`):
+```json
+{
+  "title": "Interstellar (IMAX Edition)",
+  "genre": "Sci-Fi",
+  "releaseYear": 2014,
+  "director": "Christopher Nolan",
+  "rating": 9.1
+}
+```
+
+---
+
+## 🧪 Testing
+
+### 1. Automated API Test Suite
+Run the built-in automated test script that tests all 5 CRUD operations end-to-end against the server and verifies MongoDB persistence:
+```bash
+npm test
+```
+
+### 2. Postman Desktop
+1. Open **Postman Desktop**.
+2. Click **Import** (top left).
+3. Select `CineVault.postman_collection.json` located in the root folder.
+4. Execute the requests sequentially:
+   - `1. Create Movie (POST)`
+   - `2. Get All Movies (GET)`
+   - Copy the `_id` of the created movie into the collection variable `movie_id`
+   - `3. Get Movie by ID (GET)`
+   - `4. Update Movie by ID (PUT)`
+   - `5. Delete Movie by ID (DELETE)`
+
+---
+
+## ❓ Common Issues & Troubleshooting
+
+| Error | Root Cause | Solution |
 |---|---|---|
-| `POST` | `/api/movies` | Create a new movie |
-| `GET` | `/api/movies` | Retrieve all movies |
-| `GET` | `/api/movies/:id` | Retrieve a single movie by ID |
-| `PUT` | `/api/movies/:id` | Update an existing movie by ID |
-| `DELETE` | `/api/movies/:id` | Delete a movie by ID |
-
----
-
-## 🧪 Postman Testing Guide
-
-### Option A: Import Pre-built Collection (Fastest)
-1. Open **Postman**.
-2. Click **Import** in the top-left corner.
-3. Select the file `CineVault.postman_collection.json` located in this project folder.
-4. All 5 requests will be automatically configured for you!
-
----
-
-### Option B: Manual Testing Instructions
-
-#### 1. Create a Movie (POST)
-- **Method:** `POST`
-- **URL:** `http://localhost:5000/api/movies`
-- **Headers:** `Content-Type: application/json`
-- **Body (raw JSON):**
-  ```json
-  {
-    "title": "Inception",
-    "genre": "Sci-Fi",
-    "releaseYear": 2010,
-    "director": "Christopher Nolan",
-    "rating": 8.8
-  }
-  ```
-- **Expected Status:** `201 Created`
-- **Sample Response:**
-  ```json
-  {
-    "success": true,
-    "message": "Movie created successfully",
-    "data": {
-      "_id": "67261a87e502c11451ad88b1",
-      "title": "Inception",
-      "genre": "Sci-Fi",
-      "releaseYear": 2010,
-      "director": "Christopher Nolan",
-      "rating": 8.8,
-      "createdAt": "2026-11-02T11:00:00.000Z",
-      "updatedAt": "2026-11-02T11:00:00.000Z",
-      "__v": 0
-    }
-  }
-  ```
-> 💡 *Copy the `_id` from this response to test the ID-based endpoints below!*
-
----
-
-#### 2. Get All Movies (GET)
-- **Method:** `GET`
-- **URL:** `http://localhost:5000/api/movies`
-- **Expected Status:** `200 OK`
-- **Sample Response:**
-  ```json
-  {
-    "success": true,
-    "count": 1,
-    "data": [
-      {
-        "_id": "67261a87e502c11451ad88b1",
-        "title": "Inception",
-        "genre": "Sci-Fi",
-        "releaseYear": 2010,
-        "director": "Christopher Nolan",
-        "rating": 8.8
-      }
-    ]
-  }
-  ```
-
----
-
-#### 3. Get Movie by ID (GET)
-- **Method:** `GET`
-- **URL:** `http://localhost:5000/api/movies/67261a87e502c11451ad88b1` *(use your real movie `_id`)*
-- **Expected Status:** `200 OK`
-- **Sample Response:**
-  ```json
-  {
-    "success": true,
-    "data": {
-      "_id": "67261a87e502c11451ad88b1",
-      "title": "Inception",
-      "genre": "Sci-Fi",
-      "releaseYear": 2010,
-      "director": "Christopher Nolan",
-      "rating": 8.8
-    }
-  }
-  ```
-
----
-
-#### 4. Update a Movie (PUT)
-- **Method:** `PUT`
-- **URL:** `http://localhost:5000/api/movies/67261a87e502c11451ad88b1` *(use your real movie `_id`)*
-- **Headers:** `Content-Type: application/json`
-- **Body (raw JSON):**
-  ```json
-  {
-    "title": "Inception (Remastered)",
-    "genre": "Sci-Fi / Thriller",
-    "releaseYear": 2010,
-    "director": "Christopher Nolan",
-    "rating": 9.2
-  }
-  ```
-- **Expected Status:** `200 OK`
-- **Sample Response:**
-  ```json
-  {
-    "success": true,
-    "message": "Movie updated successfully",
-    "data": {
-      "_id": "67261a87e502c11451ad88b1",
-      "title": "Inception (Remastered)",
-      "genre": "Sci-Fi / Thriller",
-      "releaseYear": 2010,
-      "director": "Christopher Nolan",
-      "rating": 9.2
-    }
-  }
-  ```
-
----
-
-#### 5. Delete a Movie (DELETE)
-- **Method:** `DELETE`
-- **URL:** `http://localhost:5000/api/movies/67261a87e502c11451ad88b1` *(use your real movie `_id`)*
-- **Expected Status:** `200 OK`
-- **Sample Response:**
-  ```json
-  {
-    "success": true,
-    "message": "Movie deleted successfully"
-  }
-  ```
-
----
-
-### Error Handling Responses
-
-- **Invalid MongoDB ID Format** (`400 Bad Request`):
-  ```json
-  {
-    "success": false,
-    "message": "Invalid movie ID format"
-  }
-  ```
-- **Movie Not Found** (`404 Not Found`):
-  ```json
-  {
-    "success": false,
-    "message": "Movie not found"
-  }
-  ```
-- **Validation Failure (Missing field / rating out of 0-10)** (`400 Bad Request`):
-  ```json
-  {
-    "success": false,
-    "message": "Movie validation failed: rating: Rating cannot exceed 10"
-  }
-  ```
-
----
-
-## 🐙 GitHub Submission Guide
-
-Follow these exact steps to push this project to a new **PUBLIC** GitHub repository:
-
-### Step 1: Initialize Git
-In the project root folder, open your terminal and run:
-```bash
-git init
-```
-
-### Step 2: Verify .gitignore
-Check that `.env` and `node_modules` are not tracked:
-```bash
-git status
-```
-*(Make sure `.env` and `node_modules/` do NOT appear in the untracked list).*
-
-### Step 3: Stage and Commit Files
-```bash
-git add .
-git commit -m "feat: complete CineVault Movie Collection API backend"
-```
-
-### Step 4: Create a New Public Repository on GitHub
-1. Log in to [GitHub](https://github.com).
-2. Click the **+** icon in the upper-right corner and select **New repository**.
-3. Name your repository (e.g., `CineVault-Movie-API`).
-4. Set visibility to **Public**.
-5. Do **not** initialize with a README, .gitignore, or license (we already created them).
-6. Click **Create repository**.
-
-### Step 5: Link and Push
-Replace `<YOUR_GITHUB_USERNAME>` and `<YOUR_REPO_NAME>` with your actual GitHub info:
-```bash
-git branch -M main
-git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO_NAME>.git
-git push -u origin main
-```
-
----
-
-## 📋 College Assignment Checklist
-
-- [x] Node.js project initialized with `package.json`
-- [x] Dependencies installed: `express`, `mongoose`, `dotenv`
-- [x] Dev dependency installed: `nodemon`
-- [x] `npm run dev` configured to start the server
-- [x] MongoDB Atlas connection configured via Mongoose
-- [x] Connection string securely stored in `.env`
-- [x] `.env` and `node_modules` added to `.gitignore`
-- [x] Movie model defined with 5 required fields and validations
-- [x] Separate controllers (`movieController.js`) and routes (`movieRoutes.js`)
-- [x] 5 CRUD API endpoints implemented (`POST`, `GET`, `GET/:id`, `PUT/:id`, `DELETE/:id`)
-- [x] `async/await` and Express JSON middleware used
-- [x] Status codes (201, 200, 400, 404, 500) and error handling implemented
-- [x] Invalid ObjectId and 404 missing movie scenarios handled
-- [x] Postman collection and manual testing documentation provided
-- [x] GitHub push instructions included
+| `MongoServerSelectionError` / `ETIMEOUT` / `tlsv1 alert internal error` | Atlas Network Access IP whitelist is blocking your connection | Go to Atlas → **Network Access** → Click **Add IP Address** → Choose **Allow Access From Anywhere** (`0.0.0.0/0`) or add your current IP. |
+| `MongoServerError: bad auth : Authentication failed` | Incorrect database username or password in `.env` | Verify user credentials in MongoDB Atlas **Database Access** and update `.env`. |
+| `EADDRINUSE: address already in use :::5000` | Port 5000 is occupied by another process | Change `PORT=5001` in `.env` or terminate the process holding port 5000. |
+| `ValidationError: Rating cannot exceed 10` | Invalid input value submitted | Rating must be a number between 0 and 10. |
